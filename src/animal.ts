@@ -1,12 +1,12 @@
-export abstract class Animal{
-  private _name:string;
-  constructor(name:string){
+export abstract class Animal {
+  private _name: string;
+  constructor(name: string) {
     this.name = name;
   }
-  get name(){
+  get name(): string {
     return this._name;
   }
-  set name(name:string){
+  set name(name: string) {
     this._name = name;
   }
 }

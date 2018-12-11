@@ -1,17 +1,18 @@
 {
-  "name": "wp-ts-tl",
+  "name": "webpack-typescript-tslint",
   "version": "1.0.0",
-  "description": "",
+  "description": "'webpack + typescript + tslint' billet.",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode development --config webpack.config.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["webpack", "typescript", "tslint", "billet", "starter"],
+  "author": "Denis Vershadov",
   "license": "ISC",
   "devDependencies": {
     "ts-loader": "^5.3.1",
+    "tslint": "^5.11.0",
+    "tslint-loader": "^3.5.4",
     "typescript": "^3.2.2",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2"
