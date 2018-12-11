@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.ts',
+  entry: './src/main.ts',
   devtool: 'inline-source-map',
   module: {
     rules: [{
@@ -22,7 +22,7 @@ module.exports = {
     extensions: ['.ts', '.js']
   },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'build')
   }
 };

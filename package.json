@@ -4,7 +4,8 @@
   "description": "'webpack + typescript + tslint' billet.",
   "private": true,
   "scripts": {
-    "build": "webpack --mode development --config webpack.config.js"
+    "build": "webpack --mode development --config webpack.dev.config.js",
+    "prod": "webpack --mode production --config webpack.prod.config.js"
   },
   "keywords": ["webpack", "typescript", "tslint", "billet", "starter"],
   "author": "Denis Vershadov",
