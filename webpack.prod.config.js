@@ -1,8 +1,16 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'production',
-  entry: './src/main.ts',
+  entry: {
+    content: path.join(__dirname, './src/content/content.ts')
+  },
+  output: {
+    path: path.join(__dirname, 'prod'),
+    filename: '[name]/[name].js'
+  },
   module: {
     rules: [{
       test: /\.ts$/,
@@ -13,8 +21,13 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js']
   },
-  output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, 'prod')
-  }
+  plugins: [
+    new CleanWebpackPlugin(['prod']),
+    new CopyWebpackPlugin([
+      {from: './src/**/*.css', to: '[name]/[name].css', flatten: true},
+      {from: './src/**/*.html', to: '[name]/[name].html', flatten: true},
+      {from: './src/icons/**', to: 'icons/', flatten: true},
+      {from: `./src/manifest.json`, to: 'manifest.json', flatten: true}
+    ])
+  ]
 };
