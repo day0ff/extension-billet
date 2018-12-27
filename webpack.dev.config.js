@@ -6,7 +6,8 @@ module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
   entry: {
-    'content/content': path.join(__dirname, './src/content/content.ts')
+    'content/content': path.join(__dirname, './src/content/content.ts'),
+    'background/background': path.join(__dirname, './src/background/background.ts')
   },
   output: {
     path: path.join(__dirname, 'build'),
@@ -34,7 +35,7 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: './src', to: './',
-        transformPath: function (targetPath) {
+        transformPath: (targetPath) => {
           return targetPath.replace('src', '');
         }, ignore: ['*.ts']
       },

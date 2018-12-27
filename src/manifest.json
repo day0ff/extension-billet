@@ -1,24 +1,39 @@
 {
   "manifest_version": 2,
+
   "name": "Billet Extension",
   "description": "This is a billet for creating an extension for browser.",
   "version": "0.1.0",
   "icons": {
-    "256": "./icons/icon256.png",
-    "128": "./icons/icon128.png",
-    "64": "./icons/icon64.png",
-    "48": "./icons/icon48.png",
-    "32": "./icons/icon32.png",
-    "16": "./icons/icon16.png"
+    "256": "icons/icon256.png",
+    "128": "icons/icon128.png",
+    "64": "icons/icon64.png",
+    "48": "icons/icon48.png",
+    "32": "icons/icon32.png",
+    "16": "icons/icon16.png"
   },
+
   "browser_action": {
-    "default_icon": "./icons/icon16.png"
+    "default_icon": "icons/icon32.png",
+    "default_popup": "popup/popup.html",
+    "default_title": "Billet Extension"
   },
+
+  "background": {
+    "scripts": ["background/background.js"],
+    "persistent": false
+  },
+
   "content_scripts":[
     {
-      "matches": ["<all_urls>"],
-      "js": ["./content/content.js"],
-      "css": ["./content/content.css"]
+      "matches": ["*://*.google.com/*"],
+      "js": ["content/content.js"],
+      "css": ["content/content.css"]
     }
+  ],
+
+  "permissions": [
+    "tabs",
+    "*://*.google.com/*"
   ]
 }

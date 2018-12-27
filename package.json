@@ -17,6 +17,7 @@
   "author": "Denis Vershadov",
   "license": "ISC",
   "devDependencies": {
+    "@types/chrome": "0.0.76",
     "clean-webpack-plugin": "^1.0.0",
     "copy-webpack-plugin": "^4.6.0",
     "ts-loader": "^5.3.1",
