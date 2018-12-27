@@ -20,8 +20,7 @@
   },
 
   "background": {
-    "scripts": ["background/background.js"],
-    "persistent": false
+    "scripts": ["background/background.js"]
   },
 
   "content_scripts":[
