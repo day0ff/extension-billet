@@ -1,6 +1,5 @@
 {
   "manifest_version": 2,
-
   "name": "Billet Extension",
   "description": "This is a billet for creating an extension for browser.",
   "version": "0.1.0",
@@ -12,27 +11,32 @@
     "32": "icons/icon32.png",
     "16": "icons/icon16.png"
   },
-
   "browser_action": {
     "default_icon": "icons/icon32.png",
     "default_popup": "popup/popup.html",
     "default_title": "Billet Extension"
   },
-
   "background": {
-    "scripts": ["background/background.js"]
+    "scripts": [
+      "background/background.js"
+    ]
   },
-
-  "content_scripts":[
+  "content_scripts": [
     {
-      "matches": ["*://*.chrome.com/*"],
-      "js": ["content/content.js"],
-      "css": ["content/content.css"]
+      "matches": [
+        "*://*.chrome.com/*"
+      ],
+      "js": [
+        "content/content.js"
+      ],
+      "css": [
+        "content/content.css"
+      ]
     }
   ],
-
   "permissions": [
     "tabs",
+    "storage",
     "*://*.chrome.com/*"
   ]
 }

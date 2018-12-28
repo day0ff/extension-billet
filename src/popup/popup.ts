@@ -12,4 +12,15 @@ web.browser.runtime.sendMessage({popup: {message: 'Hello form popup!'}}, (respon
     if (response.background) console.log(response.background.response);
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('add').addEventListener('click', () => {
+        web.browser.storage.local.get(['count'], (data: any) => {
+            const count = data.count || 0;
+            if (count) document.getElementById('count').textContent = `Count : ${count + 1}`;
+            web.browser.storage.local.set({'count': count + 1});
+        });
+    });
+});
+
+
 
