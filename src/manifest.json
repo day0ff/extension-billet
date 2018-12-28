@@ -25,7 +25,7 @@
 
   "content_scripts":[
     {
-      "matches": ["*://*.google.com/*"],
+      "matches": ["*://*.chrome.com/*"],
       "js": ["content/content.js"],
       "css": ["content/content.css"]
     }
@@ -33,6 +33,6 @@
 
   "permissions": [
     "tabs",
-    "*://*.google.com/*"
+    "*://*.chrome.com/*"
   ]
 }

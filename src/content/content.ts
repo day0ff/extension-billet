@@ -1,5 +1,13 @@
-import { Dog } from './animals/dog';
+import { web } from '../service/browser.api.wrapper';
 
-const dog = new Dog('Bark');
+console.log('Content script is running!');
 
-console.log('Content script is running! Dog name is ' + dog.name);
+web.browser.runtime.sendMessage({content: {message: 'Hello form content!'}}, (response: any) => {
+    console.log(response.background.response);
+});
+
+web.browser.runtime.onMessage.addListener((receive: any, sender: any, sendResponse: any) => {
+    if (receive.popup) console.log(receive.popup.message);
+    if (receive.background) console.log(receive.background.message);
+    sendResponse({content: {response: 'Response from Content!'}});
+});

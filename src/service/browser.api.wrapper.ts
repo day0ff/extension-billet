@@ -1,6 +1,12 @@
 declare var browser: any;
 
 class BrowserApiWrapper {
+    private static _instance: BrowserApiWrapper;
+
+    public static get instance() {
+        return this._instance || (this._instance = new this());
+    }
+
     private get isChrome(): boolean {
         return window.hasOwnProperty('chrome');
     }
@@ -10,7 +16,7 @@ class BrowserApiWrapper {
     }
 
     private get isFirefox() {
-        return !this.isChrome || !this.isSafari;
+        return !this.isChrome && !this.isSafari;
     }
 
     public get browser(): any {
@@ -22,4 +28,4 @@ class BrowserApiWrapper {
 
 }
 
-export const web = new BrowserApiWrapper();
+export const web = BrowserApiWrapper.instance;
