@@ -8,7 +8,8 @@ module.exports = {
   entry: {
     'background/background': path.join(__dirname, './src/background/background.ts'),
     'content/content': path.join(__dirname, './src/content/content.ts'),
-    'popup/popup': path.join(__dirname, './src/popup/popup.ts')
+    'popup/popup': path.join(__dirname, './src/popup/popup.ts'),
+    'scripts/injection': path.join(__dirname, './src/scripts/injection.ts')
   },
   output: {
     path: path.join(__dirname, 'build'),

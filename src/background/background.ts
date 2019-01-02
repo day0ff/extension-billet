@@ -31,9 +31,17 @@ web.browser.runtime.onInstalled.addListener(() => {
 
 
     web.browser.runtime.onMessage.addListener((receive: any, sender: any, sendResponse: any) => {
-        if (receive.content) console.log(receive.content.message);
-        if (receive.popup) console.log(receive.popup.message);
+        if (receive && receive.content) console.log(receive.content.message);
+        if (receive && receive.popup) console.log(receive.popup.message);
         sendResponse({background: {response: 'Response from Background!'}});
+    });
+
+    web.browser.commands.onCommand.addListener((command: any) => {
+        console.log('Command:', command);
+
+        web.browser.tabs.executeScript({file: 'scripts/injection.js'});
+
+        web.browser.tabs.insertCSS({file: 'styles/injection.css'});
     });
 
 });
@@ -45,5 +53,7 @@ function isEligible(url: string): boolean {
 }
 
 function enableExtension(tabId: number, tab: any): void {
-    if (isEligible(tab.url)) web.browser.browserAction.enable(tabId);
+    if (isEligible(tab.url)) {
+        web.browser.browserAction.enable(tabId);
+    }
 }
