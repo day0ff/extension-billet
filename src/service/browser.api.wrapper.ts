@@ -7,22 +7,22 @@ class BrowserApiWrapper {
         return this._instance || (this._instance = new this());
     }
 
-    private get isChrome(): boolean {
-        return window.hasOwnProperty('chrome');
+    private get isFirefox() {
+        return window.hasOwnProperty('browser');
     }
 
     private get isSafari() {
         return window.hasOwnProperty('safari');
     }
 
-    private get isFirefox() {
-        return !this.isChrome && !this.isSafari;
+    private get isChrome(): boolean {
+        return window.hasOwnProperty('chrome');
     }
 
     public get browser(): any {
-        if (this.isChrome) return chrome;
-        if (this.isSafari) return safari;
         if (this.isFirefox) return browser;
+        if (this.isSafari) return safari;
+        if (this.isChrome) return chrome;
         console.error(`Unsupported browser ${navigator.userAgent}`);
     }
 
