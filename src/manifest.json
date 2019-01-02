@@ -37,10 +37,24 @@
   "commands": {
     "injection": {
       "suggested_key": {
-        "default": "Ctrl+I",
-        "mac": "Command+I"
+        "default": "Alt+Insert",
+        "mac": "Alt+Insert"
       },
       "description": "Activates the injection of js script and css style."
+    },
+    "change-css": {
+      "suggested_key": {
+        "default": "Alt+C",
+        "mac": "Alt+C"
+      },
+      "description": "Embeds style code that modifies body border."
+    },
+    "change-js": {
+      "suggested_key": {
+        "default": "Alt+J",
+        "mac": "Alt+J"
+      },
+      "description": "Embeds script code that modifies p text."
     }
   },
   "web_accessible_resources": [

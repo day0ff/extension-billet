@@ -36,12 +36,38 @@ web.browser.runtime.onInstalled.addListener(() => {
         sendResponse({background: {response: 'Response from Background!'}});
     });
 
+
+    let cssFlag = false;
+    let jsFlag = false;
+
     web.browser.commands.onCommand.addListener((command: any) => {
         console.log('Command:', command);
+        if (command === 'injection') {
+            web.browser.tabs.executeScript({file: 'scripts/injection.js'});
+            web.browser.tabs.insertCSS({file: 'styles/injection.css'});
+        }
 
-        web.browser.tabs.executeScript({file: 'scripts/injection.js'});
+        if (command === 'change-css') {
+            if (cssFlag) {
+                web.browser.tabs.insertCSS({code: 'body{border:solid 4px green}'});
+                cssFlag = false;
+            } else {
+                web.browser.tabs.insertCSS({code: 'body{border:solid 4px red}'});
+                cssFlag = true;
+            }
+        }
 
-        web.browser.tabs.insertCSS({file: 'styles/injection.css'});
+        if (command === 'change-js') {
+            if (jsFlag) {
+                web.browser.tabs
+                    .executeScript({code: 'document.querySelectorAll("p").forEach(p=>p.style.color="gray")'});
+                jsFlag = false;
+            } else {
+                web.browser.tabs
+                    .executeScript({code: 'document.querySelectorAll("p").forEach(p=>p.style.color="red")'});
+                jsFlag = true;
+            }
+        }
     });
 
 });
