@@ -9,23 +9,34 @@ class Background {
         console.log('Background script is running!');
         this.browser = browser;
     }
+
+    public enableExtension(tabId: number, tab: any): void {
+        if (this.isEligible(tab.url)) {
+            background.browser.browser.browserAction.enable(tabId);
+        }
+    }
+
+    private isEligible(url: string): boolean {
+        return permissions.find((permission) => {
+            return url.includes(permission);
+        }) !== undefined;
+    }
 }
+
 const background = new Background(BrowserApiWrapper.instance);
 
 background.browser.browser.runtime.onInstalled.addListener(() => {
-
-
     background.browser.browser.browserAction.disable();
 
     background.browser.browser.tabs.onActivated.addListener((windowTab: any) => {
         background.browser.browser.tabs.get(windowTab.tabId)
             .then((tab: any) => {
-                enableExtension(windowTab.tabId, tab);
+                background.enableExtension(windowTab.tabId, tab);
             });
     });
 
     background.browser.browser.tabs.onUpdated.addListener((tabId: number, changeInfo: any, tab: any) => {
-        enableExtension(tabId, tab);
+        background.enableExtension(tabId, tab);
     });
 
     window.setInterval(() => {
@@ -36,7 +47,7 @@ background.browser.browser.runtime.onInstalled.addListener(() => {
                         {background: {message: 'Hello from background!'}})
                         .then((response: any) => {
                             if (response && response.content) console.log(response.content.response);
-                        });
+                        }).catch(() => console.log('The current tab is not allowed in permissions.'));
                 }
             });
     }, 5000);
@@ -45,7 +56,7 @@ background.browser.browser.runtime.onInstalled.addListener(() => {
     background.browser.receiveMessage((receive: any, sender: any, sendResponse: any) => {
         if (receive && receive.content) console.log(receive.content.message);
         if (receive && receive.popup) console.log(receive.popup.message);
-        sendResponse({background: {response: 'Response from Background!'}});
+        if (receive) sendResponse({background: {response: 'Response from Background!'}});
     });
 
 
@@ -84,14 +95,3 @@ background.browser.browser.runtime.onInstalled.addListener(() => {
 
 });
 
-function isEligible(url: string): boolean {
-    return permissions.find((permission) => {
-        return url.includes(permission);
-    }) !== undefined;
-}
-
-function enableExtension(tabId: number, tab: any): void {
-    if (isEligible(tab.url)) {
-        background.browser.browser.browserAction.enable(tabId);
-    }
-}

@@ -47,8 +47,6 @@ export class BrowserApiWrapper {
     }
 
     public receiveCommand(callback: (command: string) => void): void {
-        console.log('receiveCommand');
-        this.detectNamespace();
         if (this.isFirefox) return browser.commands.onCommand.addListener(callback);
         if (this.isChrome) return chrome.commands.onCommand.addListener(callback);
         return browser.commands.onCommand.addListener(callback);
