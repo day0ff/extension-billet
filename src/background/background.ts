@@ -1,17 +1,25 @@
-import { web } from '../service/browser.api.wrapper';
+import {BrowserApiWrapper, web} from '../service/browser.api.wrapper';
 
 const permissions = ['chrome.com'];
 
-console.log('Background script is running!');
+class Background {
+    public browser: BrowserApiWrapper;
+
+    constructor(browser: BrowserApiWrapper) {
+        console.log('Background script is running!');
+        this.browser = browser;
+    }
+}
 
 web.browser.runtime.onInstalled.addListener(() => {
 
     web.browser.browserAction.disable();
 
     web.browser.tabs.onActivated.addListener((windowTab: any) => {
-        web.browser.tabs.get(windowTab.tabId, (tab: any) => {
-            enableExtension(windowTab.tabId, tab);
-        });
+        web.browser.tabs.get(windowTab.tabId)
+            .then((tab: any) => {
+                enableExtension(windowTab.tabId, tab);
+            });
     });
 
     web.browser.tabs.onUpdated.addListener((tabId: number, changeInfo: any, tab: any) => {
@@ -19,14 +27,16 @@ web.browser.runtime.onInstalled.addListener(() => {
     });
 
     window.setInterval(() => {
-        web.browser.tabs.query({currentWindow: true, active: true}, (tabs: any) => {
-            if (tabs.length && tabs[0].id) {
-                web.browser.tabs.sendMessage(tabs[0].id,
-                    {background: {message: 'Hello from background!'}}, (response: any) => {
-                        if (response && response.content) console.log(response.content.response);
-                    });
-            }
-        });
+        web.browser.tabs.query({currentWindow: true, active: true})
+            .then((tabs: any) => {
+                if (tabs.length && tabs[0].id) {
+                    web.browser.tabs.sendMessage(tabs[0].id,
+                        {background: {message: 'Hello from background!'}})
+                        .then((response: any) => {
+                            if (response && response.content) console.log(response.content.response);
+                        });
+                }
+            });
     }, 5000);
 
 
@@ -40,7 +50,9 @@ web.browser.runtime.onInstalled.addListener(() => {
     let cssFlag = false;
     let jsFlag = false;
 
-    web.browser.commands.onCommand.addListener((command: any) => {
+    const background = new Background(BrowserApiWrapper.instance);
+
+    background.browser.receiveCommand((command: string) => {
         console.log('Command:', command);
         if (command === 'injection') {
             web.browser.tabs.executeScript({file: 'scripts/injection.js'});
@@ -69,6 +81,38 @@ web.browser.runtime.onInstalled.addListener(() => {
             }
         }
     });
+
+    // web.browser.commands.onCommand.addListener((command: any) => {
+    //     console.log('Command:', command);
+    //     if (command === 'injection') {
+    //         web.browser.tabs.executeScript({file: 'scripts/injection.js'}).then();
+    //         web.browser.tabs.insertCSS({file: 'styles/injection.css'}).then();
+    //     }
+    //
+    //     if (command === 'change-css') {
+    //         if (cssFlag) {
+    //             web.browser.tabs.insertCSS({code: 'body{border:solid 4px green}'}).then();
+    //             cssFlag = false;
+    //         } else {
+    //             web.browser.tabs.insertCSS({code: 'body{border:solid 4px red}'}).then();
+    //             cssFlag = true;
+    //         }
+    //     }
+    //
+    //     if (command === 'change-js') {
+    //         if (jsFlag) {
+    //             web.browser.tabs
+    //                 .executeScript({code: 'document.querySelectorAll("p").forEach(p=>p.style.color="gray")'})
+    //                 .then();
+    //             jsFlag = false;
+    //         } else {
+    //             web.browser.tabs
+    //                 .executeScript({code: 'document.querySelectorAll("p").forEach(p=>p.style.color="red")'})
+    //                 .then();
+    //             jsFlag = true;
+    //         }
+    //     }
+    // });
 
 });
 

@@ -1,12 +1,22 @@
-import { web } from '../service/browser.api.wrapper';
+import {BrowserApiWrapper} from '../service/browser.api.wrapper';
 
-console.log('Content script is running!');
+class Content {
+    public browser: BrowserApiWrapper;
 
-web.browser.runtime.sendMessage({content: {message: 'Hello form content!'}}, (response: any) => {
-    console.log(response.background.response);
-});
+    constructor(browser: BrowserApiWrapper) {
+        console.log('Content script is running!');
+        this.browser = browser;
+    }
+}
 
-web.browser.runtime.onMessage.addListener((receive: any, sender: any, sendResponse: any) => {
+const content = new Content(BrowserApiWrapper.instance);
+
+content.browser.sendMessage({content: {message: 'Hello form content!'}})
+    .then((response: any) => {
+        console.log(response.background.response);
+    });
+
+content.browser.receiveMessage((receive: any, sender: any, sendResponse: any) => {
     if (receive && receive.popup) console.log(receive.popup.message);
     if (receive && receive.background) console.log(receive.background.message);
     sendResponse({content: {response: 'Response from Content!'}});
