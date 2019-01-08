@@ -4,6 +4,8 @@ const permissions = ['chrome.com'];
 
 class Background {
     public browser: BrowserApiWrapper;
+    public cssFlag: boolean;
+    public jsFlag: boolean;
 
     constructor(browser: BrowserApiWrapper) {
         console.log('Background script is running!');
@@ -63,10 +65,6 @@ background.browser.receiveMessage((receive: any, sender: any, sendResponse: any)
     if (receive) sendResponse({background: {response: 'Response from Background!'}});
 });
 
-
-let cssFlag = false;
-let jsFlag = false;
-
 background.browser.receiveCommand((command: string) => {
     console.log('Command:', command);
     if (command === 'injection') {
@@ -75,25 +73,36 @@ background.browser.receiveCommand((command: string) => {
     }
 
     if (command === 'change-css') {
-        if (cssFlag) {
-            background.browser.insertCSS(undefined, {code: 'body{border:solid 4px green}'});
-            cssFlag = false;
-        } else {
-            background.browser.insertCSS(undefined, {code: 'body{border:solid 4px red}'});
-            cssFlag = true;
-        }
+        if (background.cssFlag) background.browser.insertCSS(undefined, {code: 'body{border:solid 4px green}'});
+        else background.browser.insertCSS(undefined, {code: 'body{border:solid 4px red}'});
+        background.cssFlag = !background.cssFlag;
     }
 
     if (command === 'change-js') {
-        if (jsFlag) {
-            background.browser.executeScript(undefined,
-                {code: 'document.querySelectorAll("p").forEach(p=>p.style.color="gray")'});
-            jsFlag = false;
-        } else {
-            background.browser.executeScript(undefined,
-                {code: 'document.querySelectorAll("p").forEach(p=>p.style.color="red")'});
-            jsFlag = true;
-        }
+        if (background.jsFlag) background.browser.executeScript(undefined,
+            {code: 'document.querySelectorAll("p").forEach(p=>p.style.color="gray")'});
+        else background.browser.executeScript(undefined,
+            {code: 'document.querySelectorAll("p").forEach(p=>p.style.color="red")'});
+        background.jsFlag = !background.jsFlag;
     }
 });
 
+background.browser.storageLocalGet(['count'])
+    .then((data: any) => {
+        const count = data.count || 0;
+        console.log(`Storage Sync count = ${count}`);
+        background.browser.setBadgeText({text: count.toString()});
+        if (count === 0) {
+            background.browser.setBadgeBackgroundColor({color: '#0099FF'});
+            background.browser.setBadgeText({text: ''});
+        }
+    });
+
+background.browser.storageOnChanged((changes: any, areaName: string) => {
+    background.browser.setBadgeText({text: changes.count.newValue.toString()});
+    if (changes.count.newValue === 0) {
+        background.browser.setBadgeBackgroundColor({color: '#0099FF'});
+        background.browser.setBadgeText({text: ''});
+    }
+    console.log(`Storage Sync count new value = ${changes.count.newValue}`);
+});

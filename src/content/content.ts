@@ -7,6 +7,7 @@ class Content {
         console.log('Content script is running!');
         this.browser = browser;
     }
+
 }
 
 const content = new Content(BrowserApiWrapper.instance);
@@ -21,3 +22,8 @@ content.browser.receiveMessage((receive: any, sender: any, sendResponse: any) =>
     if (receive && receive.background) console.log(receive.background.message);
     sendResponse({content: {response: 'Response from Content!'}});
 });
+
+content.browser.storageLocalGet(['count'])
+    .then((data: any) => {
+        console.log(`Storage Sync count = ${data.count || 0}`);
+    });

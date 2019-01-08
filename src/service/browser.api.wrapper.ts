@@ -46,6 +46,17 @@ export class BrowserApiWrapper {
         return browser.browserAction.disable(tabId);
     }
 
+    public setBadgeText(details: { text: string | null; tabId?: number }): void {
+        if (this.isFirefox) return browser.browserAction.setBadgeText(details);
+        if (this.isChrome) return chrome.browserAction.setBadgeText(details);
+        return browser.browserAction.setBadgeText(details);
+    }
+
+    public setBadgeBackgroundColor(details: { color: string | null; tabId?: number; }): void {
+        if (this.isFirefox) return browser.browserAction.setBadgeBackgroundColor(details);
+        if (this.isChrome) return chrome.browserAction.setBadgeBackgroundColor(details);
+        return browser.browserAction.setBadgeBackgroundColor(details);
+    }
 
     public sendMessage(message: any): Promise<any> {
         if (this.isFirefox) return browser.runtime.sendMessage(message);
@@ -107,6 +118,18 @@ export class BrowserApiWrapper {
         return browser.tabs.insertCSS(tabId, details);
     }
 
+    public storageLocalGet(keys: string | string[] | object | StorageObject | null): Promise<{ [key: string]: any }> {
+        if (this.isFirefox) return browser.storage.local.get(keys as StorageObject);
+        if (this.isChrome) return chrome.storage.local.get(keys);
+        return browser.storage.local.get(keys as StorageObject);
+    }
+
+    public storageLocalSet(items: object | StorageObject): Promise<void> {
+        if (this.isFirefox) return browser.storage.local.set(items as StorageObject);
+        if (this.isChrome) return chrome.storage.local.set(items);
+        return browser.storage.local.set(items as StorageObject);
+    }
+
     public storageSyncGet(keys: string | string[] | object | StorageObject | null): Promise<{ [key: string]: any }> {
         if (this.isFirefox) return browser.storage.sync.get(keys as StorageObject);
         if (this.isChrome) return chrome.storage.sync.get(keys);
@@ -117,6 +140,28 @@ export class BrowserApiWrapper {
         if (this.isFirefox) return browser.storage.sync.set(items as StorageObject);
         if (this.isChrome) return chrome.storage.sync.set(items);
         return browser.storage.sync.set(items as StorageObject);
+    }
+
+    public storageOnChanged(callback: (changes: object, areaName: string) => void): void {
+        if (this.isFirefox) return browser.storage.onChanged.addListener(callback);
+        if (this.isChrome) return chrome.storage.onChanged.addListener(callback);
+        return browser.storage.onChanged.addListener(callback);
+    }
+
+    public localStorageGet(keyName: string): string {
+        return localStorage.getItem(keyName);
+    }
+
+    public localStorageSet(keyName: string, keyValue: string): void {
+        return localStorage.setItem(keyName, keyValue);
+    }
+
+    public localStorageRemoveItem(keyName: string): void {
+        return localStorage.removeItem(keyName);
+    }
+
+    public localStorageClear(): void {
+        return localStorage.clear();
     }
 
     private detectNamespace() {
