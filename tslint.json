@@ -18,10 +18,17 @@
       "ban-keywords",
       "check-format",
       "allow-leading-underscore"
+    ],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-operator",
+      "check-typecast"
     ]
   },
   "exclude": [
     "build/**/*",
+    "prod",
     "node_modules/**/*"
   ],
   "rulesDirectory": []
