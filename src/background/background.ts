@@ -1,4 +1,4 @@
-import {BrowserApiWrapper} from '../service/browser.api.wrapper';
+import { BrowserApiWrapper } from '../service/browser.api.wrapper';
 
 const permissions = ['chrome.com'];
 
@@ -12,7 +12,7 @@ class Background {
 
     public enableExtension(tabId: number, tab: any): void {
         if (this.isEligible(tab.url)) {
-            background.browser.browser.browserAction.enable(tabId);
+            background.browser.enable(tabId);
         }
     }
 
@@ -25,17 +25,17 @@ class Background {
 
 const background = new Background(BrowserApiWrapper.instance);
 
-background.browser.browser.runtime.onInstalled.addListener(() => {
-    background.browser.browser.browserAction.disable();
+background.browser.onInstalled(() => {
+    background.browser.disable();
 
-    background.browser.browser.tabs.onActivated.addListener((windowTab: any) => {
-        background.browser.browser.tabs.get(windowTab.tabId)
-            .then((tab: any) => {
-                background.enableExtension(windowTab.tabId, tab);
-            });
+    background.browser.tabsOnActivated((activeInfo: any) => {
+        background.browser.tabsGet(activeInfo.tabId)
+            .then((tab: number) => {
+                background.enableExtension(activeInfo.tabId, tab);
+            }).catch(() => console.log('Can not enable extension on current tab.'));
     });
 
-    background.browser.browser.tabs.onUpdated.addListener((tabId: number, changeInfo: any, tab: any) => {
+    background.browser.tabsOnUpdated((tabId: number, changeInfo: any, tab: any) => {
         background.enableExtension(tabId, tab);
     });
 

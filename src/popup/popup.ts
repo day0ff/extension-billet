@@ -1,4 +1,4 @@
-import {BrowserApiWrapper, web} from '../service/browser.api.wrapper';
+import { BrowserApiWrapper } from '../service/browser.api.wrapper';
 
 class Popup {
     public browser: BrowserApiWrapper;
@@ -30,11 +30,12 @@ popup.browser.receiveCommand((command: any) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('add').addEventListener('click', () => {
-        web.browser.storage.local.get(['count'])
+        popup.browser.storageSyncGet(['count'])
             .then((data: any) => {
                 const count = data.count || 0;
                 if (count) document.getElementById('count').textContent = `Count : ${count + 1}`;
-                web.browser.storage.local.set({count: count + 1});
+                popup.browser.storageSyncSet({count: count + 1})
+                    .catch(() => console.log('Can not save to sync storage.'));
             });
     });
 });

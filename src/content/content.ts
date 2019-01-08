@@ -1,4 +1,4 @@
-import {BrowserApiWrapper} from '../service/browser.api.wrapper';
+import { BrowserApiWrapper } from '../service/browser.api.wrapper';
 
 class Content {
     public browser: BrowserApiWrapper;
