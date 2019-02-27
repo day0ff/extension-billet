@@ -1,4 +1,4 @@
-import { BrowserApiWrapper } from '../service/browser.api.wrapper';
+import { BrowserApiWrapper } from '../browser-api/browser.api.wrapper';
 
 const permissions = ['chrome.com'];
 
@@ -6,6 +6,7 @@ class Background {
     public browser: BrowserApiWrapper;
     public cssFlag: boolean;
     public jsFlag: boolean;
+    public iconFlag: boolean;
 
     constructor(browser: BrowserApiWrapper) {
         console.log('Background script is running!');
@@ -84,6 +85,29 @@ background.browser.receiveCommand((command: string) => {
         else background.browser.executeScript(undefined,
             {code: 'document.querySelectorAll("p").forEach(p=>p.style.color="red")'});
         background.jsFlag = !background.jsFlag;
+    }
+
+    if (command === 'change-icon') {
+        // You can not use icons more then 196px * 196px resolution.
+        if (background.iconFlag) background.browser.setIcon({
+            path: {
+                16: 'icons/icon16.png',
+                32: 'icons/icon32.png',
+                48: 'icons/icon48.png',
+                64: 'icons/icon64.png',
+                128: 'icons/icon128.png'
+            }
+        });
+        else background.browser.setIcon({
+            path: {
+                16: 'icons/icon16invert.png',
+                32: 'icons/icon32invert.png',
+                48: 'icons/icon48invert.png',
+                64: 'icons/icon64invert.png',
+                128: 'icons/icon128invert.png'
+            }
+        });
+        background.iconFlag = !background.iconFlag;
     }
 });
 

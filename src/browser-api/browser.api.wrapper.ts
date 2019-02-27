@@ -164,8 +164,15 @@ export class BrowserApiWrapper {
         return localStorage.clear();
     }
 
+    public setIcon(details: object) {
+        if (this.isFirefox) return browser.browserAction.setIcon(details);
+        if (this.isChrome) return chrome.browserAction.setIcon(details);
+        return browser.browserAction.setIcon(details);
+    }
+
     private detectNamespace() {
         console.log(`browser = ${this.isFirefox}`);
         console.log(`chrome = ${this.isChrome}`);
     }
+
 }

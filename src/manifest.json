@@ -55,6 +55,13 @@
         "mac": "Alt+J"
       },
       "description": "Embeds script code that modifies p text."
+    },
+    "change-icon": {
+      "suggested_key": {
+        "default": "Alt+I",
+        "mac": "Alt+I"
+      },
+      "description": "Change the icon of the browser action."
     }
   },
   "web_accessible_resources": [

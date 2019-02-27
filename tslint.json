@@ -24,6 +24,13 @@
       "check-branch",
       "check-operator",
       "check-typecast"
+    ],
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "never",
+        "singleline": "never"
+      }
     ]
   },
   "exclude": [

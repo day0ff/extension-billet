@@ -1,4 +1,4 @@
-import { BrowserApiWrapper } from '../service/browser.api.wrapper';
+import { BrowserApiWrapper } from '../browser-api/browser.api.wrapper';
 
 class Popup {
     public browser: BrowserApiWrapper;
