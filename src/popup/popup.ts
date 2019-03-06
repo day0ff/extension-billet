@@ -1,4 +1,4 @@
-import { BrowserApiWrapper } from '../browser-api/browser.api.wrapper';
+import {BrowserApiWrapper} from '../browser-api/browser.api.wrapper';
 
 class Popup {
     public browser: BrowserApiWrapper;
@@ -56,6 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.browser.storageLocalSet({count: 0})
             .then(() => {
                 document.getElementById('count').textContent = `Count : 0`;
+            });
+    });
+    document.getElementById('create').addEventListener('click', () => {
+        popup.browser.tabsCreate({url: "_generated_background_page.html"})
+            .then((response: any) => {
+                console.log('Created new tab.', response);
             });
     });
 });

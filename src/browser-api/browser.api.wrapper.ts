@@ -100,6 +100,12 @@ export class BrowserApiWrapper {
         return browser.tabs.onActivated.addListener(callback);
     }
 
+    public tabsCreate(createProperties: object): Promise<any> {
+        if (this.isFirefox) return browser.tabs.create(createProperties);
+        if (this.isChrome) return chrome.tabs.create(createProperties);
+        return browser.tabs.create(createProperties);
+    }
+
     public receiveCommand(callback: (command: string) => void): void {
         if (this.isFirefox) return browser.commands.onCommand.addListener(callback);
         if (this.isChrome) return chrome.commands.onCommand.addListener(callback);
